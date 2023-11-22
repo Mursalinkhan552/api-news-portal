@@ -46,7 +46,7 @@ const showAllCategoryNews = (data, name) => {
     allNewsContainer.textContent = '';
 
     data.forEach(singleNews => {
-        const { _id, image_url, title, details, author, total_view } = singleNews;
+        const { _id, image_url, title, details, author, total_view, rating } = singleNews;
         // console.log(singleNews);
         const div = document.createElement('div');
         div.classList.add('card', 'mb-3');
@@ -77,8 +77,9 @@ const showAllCategoryNews = (data, name) => {
             <i class="fa-solid fa-eye"></i>
             <p class="m-0">${total_view ? total_view : "Not Found"}</p>
             </div>
-            <div>
-            <i class="fa-solid fa-star"></i>
+            <div class="d-flex align-items-center gap-2">
+            ${ratingCount(rating.number)}
+            <p class="m-0 p-0 fs-5">${rating.number}</p>
             </div>
             <div>
             <i onclick="loadSingleNews('${_id}')" class="fa-solid fa-circle-arrow-right text-info fs-2" data-bs-toggle="modal" data-bs-target="#exampleModal"></i>
@@ -111,7 +112,7 @@ const loadSingleNews = async (id) => {
 const showSingleNews = (data) => {
     // console.log(data);
     const container = document.getElementById('modal-container');
-    const { image_url, title, details, author, total_view,others_info } = data;
+    const { image_url, title, details, author, total_view,others_info,rating } = data;
     container.innerHTML = `
    <div class="card mb-3"> 
    <div class="row g-0">
@@ -137,9 +138,10 @@ const showSingleNews = (data) => {
        <i class="fa-solid fa-eye"></i>
        <p class="m-0">${total_view ? total_view : "Not Found"}</p>
        </div>
-       <div>
-       <i class="fa-solid fa-star"></i>
-       </div>
+       <div class="d-flex align-items-center gap-2">
+            ${ratingCount(rating.number)}
+            <p class="m-0 p-0 fs-5">${rating.number}</p>
+        </div>
      </div>
    </div>
   </div>
@@ -155,4 +157,15 @@ const showTrending = () =>{
     console.log(trendingNews);
     const categoryName = document.getElementById('category-name').innerText
     showAllCategoryNews(trendingNews,categoryName)
+}
+
+const ratingCount = rating =>{
+    let ratingHtml = '';
+    for (let i = 1; i <= Math.floor(rating); i++) {
+        ratingHtml += `<i class="fa-solid fa-star"></i>`;
+    }
+    if(rating - Math.floor(rating) > 0){
+        ratingHtml += `<i class="fa-solid fa-star-half"></i>`;
+    }
+    return ratingHtml;
 }
